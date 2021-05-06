@@ -1,8 +1,9 @@
-const { Subscribers } = require('../helpers/dbObjects');
-const { prefix } = require('../config.json');
+const { Subscribers } = require('../../helpers/dbObjects');
+const { prefix } = require('../../config.json');
 
 module.exports = {
     name: 'subscribe',
+    category: 'motivation',
     description: 'Subscribes you to the motivational bot',
     aliases: ['sub'],
     args: false,
@@ -25,6 +26,5 @@ module.exports = {
             console.error(err);
             return message.reply('Something went wrong when attempting to subscribe');
         }
-
     },
 };

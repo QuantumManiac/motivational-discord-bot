@@ -1,8 +1,9 @@
-const { Subscribers } = require('../helpers/dbObjects');
-const { prefix } = require('../config.json');
+const { Subscribers } = require('../../helpers/dbObjects');
+const { prefix } = require('../../config.json');
 
 module.exports = {
     name: 'unsubscribe',
+    category: 'motivation',
     description: 'Unsubscribes you from the motivational bot',
     aliases: ['unsub', 'lemmeout'],
     args: false,
