@@ -1,0 +1,26 @@
+{
+  "name": "motivational-discord-bot",
+  "version": "1.0.0",
+  "description": "A discord bot that sends motivational messages themed towards the game users are playing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuantumManiac/motivational-discord-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/QuantumManiac/motivational-discord-bot/issues"
+  },
+  "homepage": "https://github.com/QuantumManiac/motivational-discord-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}
