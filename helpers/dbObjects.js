@@ -9,5 +9,6 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 });
 
 const Subscribers = require('../models/Subscribers')(sequelize, Sequelize.DataTypes);
+const Motivations = require('../models/Motivations')(sequelize, Sequelize.DataTypes);
 
-module.exports = { Subscribers };
+module.exports = { Subscribers, Motivations };
