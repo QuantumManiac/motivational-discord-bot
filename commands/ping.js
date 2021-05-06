@@ -1,9 +1,9 @@
 module.exports = {
-	name: 'ping',
-	description: 'Ping!',
+    name: 'ping',
+    description: 'Ping!',
     args: false,
     guildOnly: false,
-	execute(message, args) {
-		message.channel.send('Pong.');
-	},
+    execute(message, args) {
+        message.channel.send('Pong.');
+    },
 };
