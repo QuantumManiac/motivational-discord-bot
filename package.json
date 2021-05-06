@@ -18,9 +18,12 @@
   "homepage": "https://github.com/QuantumManiac/motivational-discord-bot#readme",
   "dependencies": {
     "discord.js": "^12.5.3",
-    "dotenv": "^8.6.0"
+    "dotenv": "^8.6.0",
+    "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "eslint": "^7.25.0"
+    "eslint": "^7.25.0",
+    "eslint-config-strongloop": "^2.1.0"
   }
 }
