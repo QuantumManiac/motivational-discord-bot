@@ -64,6 +64,10 @@ client.on('message', async message => {
     }
 });
 
+client.on('rateLimit', info => {
+    console.log(`Rate limit hit ${info.timeDifference ? info.timeDifference : info.timeout ? info.timeout : 'Unknown timeout '}`);
+});
+
 // Random Motivation
 // const motivateInterval = setInterval(() => {
 //     console.log('test');

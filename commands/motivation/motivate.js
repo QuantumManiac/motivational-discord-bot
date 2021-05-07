@@ -1,4 +1,4 @@
-// const { Motivations } = require('../../helpers/dbObjects');
+const Discord = require('discord.js');
 const customMotivationHandlers = require('../../helpers/customMotivationHandlers');
 
 module.exports = {
@@ -6,51 +6,71 @@ module.exports = {
     category: 'motivation',
     description: 'Sends a motivation to either you or the selected user',
     usage: '[username_mention]',
+    aliases: ['motivateme', 'motivation'],
     args: false,
     guildOnly: true, // TODO: Add subscription for DMs
-    execute(message, args) {
+    async execute(message, args) {
+        let recipient = {};
+
         if (!args.length) {
-            return message.reply(getMotivation(message.author));
+            recipient = message.author;
+        } else {
+
+            let targetUserMention = args[0];
+            let targetUserId = getUserFromMention(targetUserMention);
+
+            if (!targetUserId || !message.channel.members.has(targetUserId)) {
+                return message.reply('User to motivate does not exist in this channel');
+            }
+
+            recipient = message.channel.members.get(targetUserId).user;
         }
 
-        let targetUserMention = args[0];
-        let targetUserId = getUserFromMention(targetUserMention);
-        console.log(targetUserId);
 
-        if (!targetUserId || !message.channel.members.has(targetUserId)) {
-            return message.reply('User to motivate does not exist in this channel');
-        }
+        let motivation = getMotivation(recipient);
 
-        message.channel.send(`${targetUserMention} \n ${getMotivation(message.channel.members.get(targetUserId).user)}`);
+        let footerText = `Category: ${motivation.category} ${motivation?.id ? `| ID: ${motivation.id}` : '' } ${motivation?.author ? `| Author: ${motivation.author}` : '' }`;
+
+        const motivationEmbed = new Discord.MessageEmbed()
+            .setColor('#42ABAE')
+            .setTitle('A motivation for you!')
+            .setDescription(motivation.message)
+            .setFooter(footerText)
+            .setThumbnail(motivation?.image);
+
+        await message.channel.send(`${recipient} ⬇`);
+        await message.channel.send(motivationEmbed);
     },
 };
 
-// TODO weightings for each activity. Games are high, Spotify and Custom status low
 function getMotivation(user) {
+    let activityWeights = {};
+    let weightSum = 0;
+
     let activities = { games: [] };
     user.presence.activities.forEach(activity => {
         if (activity.name === 'Spotify') {
             activities.spotify = activity;
+            activityWeights.spotify = 0.07;
+            weightSum += 0.15;
         } else if (activity.name === 'Custom Status') {
             activities.status = activity;
+            activityWeights.status = 0.05;
+            weightSum += 0.1;
         } else {
             activities.games.push(activity);
+            activityWeights.game = 0.5;
+            weightSum += 0.5;
         }
     });
 
-    if (activities.games.length) {
-        return motivateForCategory('game', user);
+    for (const [key, value] of Object.entries(activityWeights)) {
+        activityWeights[key] = (value / weightSum);
     }
 
-    if (activities.spotify) {
-        return motivateForCategory('spotify', user, activities.spotify);
-    }
+    let randomCategory = weightedRandomChoice(activityWeights) ?? 'generic';
 
-    if (activities.status?.state) {
-        return motivateForCategory('status', user, activities.status);
-    }
-
-    return motivateForCategory('generic', user);
+    return motivateForCategory(randomCategory, user, activities[randomCategory]);
 }
 
 function getUserFromMention(mention) {
@@ -60,7 +80,16 @@ function getUserFromMention(mention) {
     return null;
 }
 
+function weightedRandomChoice(weightings) {
+    let sum = 0;
+
+    for (let i in weightings) {
+        sum += weightings[i];
+        if (Math.random() <= sum) return i;
+    }
+}
+
 function motivateForCategory(category, user, activity) {
-    return customMotivationHandlers[category][Math.floor(Math.random() * customMotivationHandlers.status.length)](user, activity);
+    return customMotivationHandlers[category][Math.floor(Math.random() * customMotivationHandlers[category].length)](user, activity);
 }
 

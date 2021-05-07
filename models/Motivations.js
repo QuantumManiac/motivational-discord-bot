@@ -3,6 +3,7 @@ const { defaultMotivationPictureUrl } = require('../config.json');
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('motivations', {
         motivation: DataTypes.TEXT,
+        category: DataTypes.STRING,
         author: DataTypes.STRING,
         activity_name: {
             type: DataTypes.STRING,
